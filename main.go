@@ -1,46 +1,37 @@
 /*
- Begin by
+ Begin by opening a browser, and point it at localhost.
+ Then, very quickly, start an http listener.
 */
 
-package main
+package webhead
 
 import (
-	"fmt"
 	"net/http"
 	"os/exec"
-	"time"
 )
 
-func main() {
+func Start() error {
 
 	// Start opening the browser, pointed at the application
-	openUI()
+	err := openUI()
+	if err != nil {
+		return err
+	}
 
 	// The webserver has to run on the main go thread, or the program will
 	// reach the end and quit. Nothing else will happen until this func returns
-	startServer()
+	err = startServer()
+	return err
 
 }
 
-func startServer() {
-	http.HandleFunc("/", uiCall)
+func startServer() error {
 	err := http.ListenAndServe(":12415", nil)
-	if err != nil {
-		fmt.Println(err)
-	}
+	return err
 }
 
-func uiCall(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Hello from your favorite application")
-}
-
-func openUI() {
-	time.Sleep(1 * time.Second)
+func openUI() error {
 	var cmd = exec.Command("open", "http://localhost:12415/")
 	err := cmd.Run()
-	if err != nil {
-		fmt.Println(err)
-	} else {
-		fmt.Println("Growing a head")
-	}
+	return err
 }
