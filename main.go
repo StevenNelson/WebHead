@@ -10,28 +10,28 @@ import (
 	"os/exec"
 )
 
-func Start() error {
+func Start(port string) error {
 
 	// Start opening the browser, pointed at the application
-	err := openUI()
+	err := openUI(port)
 	if err != nil {
 		return err
 	}
 
 	// The webserver has to run on the main go thread, or the program will
 	// reach the end and quit. Nothing else will happen until this func returns
-	err = startServer()
+	err = startServer(port)
 	return err
 
 }
 
 func startServer() error {
-	err := http.ListenAndServe(":12415", nil)
+	err := http.ListenAndServe(":"+port, nil)
 	return err
 }
 
 func openUI() error {
-	var cmd = exec.Command("open", "http://localhost:12415/")
+	var cmd = exec.Command("open", "http://localhost:"+port+"/")
 	err := cmd.Run()
 	return err
 }
