@@ -25,12 +25,12 @@ func Start(port string) error {
 
 }
 
-func startServer() error {
+func startServer(port string) error {
 	err := http.ListenAndServe(":"+port, nil)
 	return err
 }
 
-func openUI() error {
+func openUI(port string) error {
 	var cmd = exec.Command("open", "http://localhost:"+port+"/")
 	err := cmd.Run()
 	return err
